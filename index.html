@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>💖 Matchmaker for the Web 💖</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #ff9a9e, #fad0c4);
+        text-align: center;
+        color: #333;
+    }
+
+    .container {
+        width: 60%;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+        color: #e6005c;
+    }
+
+    .heart {
+        font-size: 24px;
+        color: red;
+    }
+
+    .question {
+        margin: 15px 0;
+    }
+
+    input {
+        padding: 5px;
+        width: 50px;
+        text-align: center;
+    }
+
+    button {
+        background: #ff4d6d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background: #e6005c;
+    }
+
+    #results {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    .error {
+        color: red;
+        font-size: 14px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>💖 Matchmaker for the Web 💖</h1>
+
+    <p>
+        Answer each question from <b>1 (Strongly Disagree)</b> to 
+        <b>5 (Strongly Agree)</b>. Let's see if we’re soulmates ❤️
+    </p>
+
+    <div class="question">
+        1. I love staying in for a cozy night ❤️<br>
+        <input type="number" id="q1">
+        <div class="error" id="e1"></div>
+    </div>
+
+    <div class="question">
+        2. I enjoy romantic movies 🎬<br>
+        <input type="number" id="q2">
+        <div class="error" id="e2"></div>
+    </div>
+
+    <div class="question">
+        3. Chocolate is the best dessert 🍫<br>
+        <input type="number" id="q3">
+        <div class="error" id="e3"></div>
+    </div>
+
+    <div class="question">
+        4. I like surprise gifts 🎁<br>
+        <input type="number" id="q4">
+        <div class="error" id="e4"></div>
+    </div>
+
+    <div class="question">
+        5. Communication is key in relationships 💬<br>
+        <input type="number" id="q5">
+        <div class="error" id="e5"></div>
+    </div>
+
+    <button onclick="calculateMatch()">Find My Match 💘</button>
+
+    <div id="results"></div>
+</div>
+
+<script>
+    // ===== CONSTANTS =====
+    const IDEAL_ANSWERS = [5, 4, 5, 4, 5];
+
+    const TRUE_LOVE_THRESHOLD = 85;
+    const FRIEND_THRESHOLD = 60;
+
+    // ===== VALIDATION FUNCTION =====
+    function validate(value, errorId) {
+        if (value === "" || isNaN(value)) {
+            document.getElementById(errorId).innerText = "Please enter a number (1-5)";
+            return false;
+        }
+
+        if (value < 1 || value > 5) {
+            document.getElementById(errorId).innerText = "Value must be between 1 and 5";
+            return false;
+        }
+
+        document.getElementById(errorId).innerText = "";
+        return true;
+    }
+
+    // ===== MAIN FUNCTION =====
+    function calculateMatch() {
+        let userAnswers = [];
+        let valid = true;
+
+        for (let i = 1; i <= 5; i++) {
+            let value = document.getElementById("q" + i).value;
+
+            if (!validate(value, "e" + i)) {
+                valid = false;
+            }
+
+            userAnswers.push(Number(value));
+        }
+
+        if (!valid) return;
+
+        let totalDifference = 0;
+        let resultsHTML = "<h3>💌 Compatibility Breakdown:</h3><ul>";
+
+        for (let i = 0; i < 5; i++) {
+            let diff = Math.abs(userAnswers[i] - IDEAL_ANSWERS[i]);
+            totalDifference += diff;
+
+            resultsHTML += `<li>Question ${i + 1}: Difference = ${diff}</li>`;
+        }
+
+        resultsHTML += "</ul>";
+
+        let score = 100 - (totalDifference * 5); // scale nicely
+        if (score < 0) score = 0;
+
+        let message = "";
+
+        if (score >= TRUE_LOVE_THRESHOLD) {
+            message = "💖 TRUE LOVE! We are a perfect match!";
+        } else if (score >= FRIEND_THRESHOLD) {
+            message = "😊 We'd make great friends!";
+        } else {
+            message = "🚨 Run away! This might not work...";
+        }
+
+        resultsHTML += `<h3>💯 Compatibility Score: ${score}%</h3>`;
+        resultsHTML += `<h2>${message}</h2>`;
+
+        document.getElementById("results").innerHTML = resultsHTML;
+    }
+</script>
+
+</body>
+</html>
