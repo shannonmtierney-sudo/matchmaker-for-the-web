@@ -171,12 +171,12 @@
         if (score >= TRUE_LOVE_THRESHOLD) {
             message = "💖 TRUE LOVE! We are a perfect match!";
         } else if (score >= FRIEND_THRESHOLD) {
-            message = "😊 We'd make great friends!";
+            message = ":) We'd make great friends!";
         } else {
-            message = "🚨 Run away! This might not work...";
+            message = "｡°⚠︎°｡ Run away! This might not work...";
         }
 
-        resultsHTML += `<h3>💯 Compatibility Score: ${score}%</h3>`;
+        resultsHTML += `<h3>⭐ Compatibility Score: ${score}%</h3>`;
         resultsHTML += `<h2>${message}</h2>`;
 
         document.getElementById("results").innerHTML = resultsHTML;
